@@ -1,3 +1,4 @@
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from django.views.generic import ListView, DetailView
@@ -5,7 +6,7 @@ from django.views.generic import ListView, DetailView
 from taxi.models import Driver, Car, Manufacturer
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     """View function for the home page of the site."""
 
     context = {
@@ -45,10 +46,12 @@ class DriverListView(ListView):
 class DriverDetailView(DetailView):
     model = Driver
     template_name = "taxi/driver_detail.html"
+    queryset = Driver.objects.prefetch_related("id__id")
+    context_object_name = "driver_detail"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["driver_id"] = Car.objects.filter(
-            drivers__id=self.kwargs.get("pk")
-        )
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["driver_id"] = Car.objects.filter(
+    #         drivers__id=self.kwargs.get("pk")
+    #     )
+    #     return context

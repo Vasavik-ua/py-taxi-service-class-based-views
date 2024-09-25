@@ -48,4 +48,3 @@ class DriverDetailView(DetailView):
     template_name = "taxi/driver_detail.html"
     queryset = Driver.objects.prefetch_related("cars__manufacturer")
     context_object_name = "driver_detail"
-
